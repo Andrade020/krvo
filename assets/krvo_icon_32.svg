@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bgSmall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Fundo -->
+  <rect width="32" height="32" rx="6" fill="url(#bgSmall)"/>
+  
+  <!-- Corvo ultra simplificado -->
+  <g transform="translate(4, 6)">
+    <!-- Corpo + cabeça unidos -->
+    <path d="M8 18 Q2 14 4 8 Q8 4 14 6 Q20 4 22 10 Q24 16 20 20 Q14 22 8 18 Z" fill="#2d2d3a"/>
+    
+    <!-- Bico -->
+    <path d="M20 8 L26 10 L20 12 Z" fill="#1a1a24"/>
+    
+    <!-- Olho -->
+    <circle cx="17" cy="9" r="2" fill="#e94560"/>
+  </g>
+  
+  <!-- Envelope minúsculo -->
+  <rect x="22" y="14" width="6" height="4" rx="0.5" fill="#f4e4c1" transform="rotate(-10 25 16)"/>
+</svg>

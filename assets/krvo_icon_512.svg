@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Gradiente para o corpo do corvo -->
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d2d3a"/>
+      <stop offset="50%" style="stop-color:#1a1a24"/>
+      <stop offset="100%" style="stop-color:#0d0d12"/>
+    </linearGradient>
+    
+    <!-- Gradiente para brilho nas penas -->
+    <linearGradient id="featherShine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a4a5e"/>
+      <stop offset="50%" style="stop-color:#6b6b8a"/>
+      <stop offset="100%" style="stop-color:#4a4a5e"/>
+    </linearGradient>
+    
+    <!-- Gradiente para o envelope -->
+    <linearGradient id="envelopeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4e4c1"/>
+      <stop offset="100%" style="stop-color:#e8d4a8"/>
+    </linearGradient>
+    
+    <!-- Brilho do olho -->
+    <radialGradient id="eyeGlow" cx="30%" cy="30%" r="50%">
+      <stop offset="0%" style="stop-color:#ff6b6b"/>
+      <stop offset="60%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#8b0000"/>
+    </radialGradient>
+    
+    <!-- Sombra -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  
+  <!-- Fundo circular opcional -->
+  <circle cx="256" cy="256" r="240" fill="#16213e"/>
+  <circle cx="256" cy="256" r="220" fill="#1a1a2e"/>
+  
+  <!-- Corpo principal do corvo -->
+  <g filter="url(#shadow)">
+    <!-- Corpo -->
+    <path d="M180 380 
+             Q140 340 130 280 
+             Q120 220 160 170
+             Q200 120 260 110
+             Q320 100 360 140
+             Q400 180 390 250
+             Q385 300 360 340
+             Q340 370 300 390
+             Q260 410 220 400
+             Z" 
+          fill="url(#bodyGrad)"/>
+    
+    <!-- Asa esquerda (dobrada) -->
+    <path d="M150 280
+             Q100 260 80 220
+             Q60 180 90 150
+             Q110 200 140 230
+             Q160 250 150 280
+             Z"
+          fill="url(#bodyGrad)"/>
+    
+    <!-- Detalhes das penas da asa -->
+    <path d="M90 160 Q110 180 130 220" stroke="url(#featherShine)" stroke-width="2" fill="none"/>
+    <path d="M85 175 Q105 195 120 230" stroke="url(#featherShine)" stroke-width="1.5" fill="none"/>
+    <path d="M80 190 Q100 210 115 240" stroke="url(#featherShine)" stroke-width="1" fill="none"/>
+    
+    <!-- Cabeça -->
+    <ellipse cx="320" cy="160" rx="70" ry="60" fill="url(#bodyGrad)"/>
+    
+    <!-- Bico -->
+    <path d="M370 150
+             Q420 145 440 160
+             Q420 175 370 170
+             Z"
+          fill="#1a1a24"/>
+    <path d="M370 160 Q400 160 420 160" stroke="#0d0d12" stroke-width="1"/>
+    
+    <!-- Olho -->
+    <ellipse cx="340" cy="145" rx="18" ry="16" fill="url(#eyeGlow)"/>
+    <ellipse cx="344" cy="142" rx="6" ry="5" fill="#fff" opacity="0.8"/>
+    
+    <!-- Penas do peito - textura -->
+    <path d="M200 250 Q210 270 200 290" stroke="url(#featherShine)" stroke-width="1.5" fill="none"/>
+    <path d="M220 240 Q230 265 220 290" stroke="url(#featherShine)" stroke-width="1.5" fill="none"/>
+    <path d="M240 235 Q250 260 240 285" stroke="url(#featherShine)" stroke-width="1.5" fill="none"/>
+    <path d="M260 230 Q270 255 260 280" stroke="url(#featherShine)" stroke-width="1.5" fill="none"/>
+    
+    <!-- Cauda -->
+    <path d="M180 380
+             Q150 420 120 450
+             Q160 440 180 420
+             Q170 440 150 470
+             Q190 450 200 420
+             Q195 450 185 480
+             Q220 450 220 400
+             Z"
+          fill="url(#bodyGrad)"/>
+  </g>
+  
+  <!-- Envelope no bico -->
+  <g transform="translate(400, 180) rotate(-15)">
+    <!-- Envelope base -->
+    <rect x="0" y="0" width="70" height="50" rx="3" fill="url(#envelopeGrad)" stroke="#c9b896" stroke-width="1.5"/>
+    
+    <!-- Aba do envelope -->
+    <path d="M0 0 L35 25 L70 0" fill="none" stroke="#c9b896" stroke-width="1.5"/>
+    
+    <!-- Selo -->
+    <circle cx="55" cy="35" r="8" fill="#e94560"/>
+    <text x="55" y="38" font-size="8" fill="#fff" text-anchor="middle" font-family="Arial" font-weight="bold">K</text>
+    
+    <!-- Linhas do texto -->
+    <line x1="10" y1="30" x2="40" y2="30" stroke="#c9b896" stroke-width="1"/>
+    <line x1="10" y1="38" x2="35" y2="38" stroke="#c9b896" stroke-width="1"/>
+  </g>
+  
+  <!-- Pequenas partículas/estrelas ao redor -->
+  <circle cx="120" cy="100" r="3" fill="#6b6b8a" opacity="0.6"/>
+  <circle cx="450" cy="300" r="2" fill="#6b6b8a" opacity="0.5"/>
+  <circle cx="100" cy="350" r="2.5" fill="#6b6b8a" opacity="0.4"/>
+  <circle cx="420" cy="420" r="2" fill="#6b6b8a" opacity="0.5"/>
+</svg>

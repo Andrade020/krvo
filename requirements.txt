@@ -1,0 +1,14 @@
+# Porto Mailer - Dependências
+# ============================
+
+# Interface gráfica
+customtkinter>=5.2.0
+
+# Requisições HTTP
+requests>=2.28.0
+
+# Build (opcional - para gerar .exe)
+pyinstaller>=6.0.0
+
+# Opcional: para ícones nativos no Windows
+# pillow>=9.0.0
