@@ -746,25 +746,22 @@ class AboutPanel(ctk.CTkFrame):
         logo_frame = ctk.CTkFrame(self, fg_color="transparent")
         logo_frame.pack(pady=40)
         
-        # Logo estilizada em vez de emoji (melhor compatibilidade Linux)
-        ctk.CTkLabel(logo_frame, text="K", 
-            font=ctk.CTkFont(size=72, weight="bold"), 
-            text_color=COLORS["accent"]).pack()
+        ctk.CTkLabel(logo_frame, text="🐦‍⬛", font=ctk.CTkFont(size=72)).pack()
         ctk.CTkLabel(logo_frame, text="Krvo",
-            font=ctk.CTkFont(size=36, weight="bold"), text_color=COLORS["text"]).pack(pady=(10, 5))
+            font=ctk.CTkFont(size=36, weight="bold"), text_color=COLORS["accent"]).pack(pady=(10, 5))
         ctk.CTkLabel(logo_frame, text="Mensageiro Digital",
             font=ctk.CTkFont(size=14), text_color=COLORS["text_dim"]).pack()
         ctk.CTkLabel(logo_frame, text="v1.0.0",
             font=ctk.CTkFont(size=12), text_color=COLORS["text_dim"]).pack(pady=(5,0))
         
-        ctk.CTkLabel(self, text="Como um corvo mensageiro, leva suas mensagens\ncom precisao e confiabilidade.",
+        ctk.CTkLabel(self, text="Como um corvo mensageiro, leva suas mensagens\ncom precisão e confiabilidade.",
             font=ctk.CTkFont(size=13), text_color=COLORS["text"], justify="center").pack(pady=20)
         
         features_frame = ctk.CTkFrame(self, fg_color=COLORS["bg_light"], corner_radius=10)
         features_frame.pack(fill="x", padx=50, pady=20)
         
-        for feat in ["* Envio por regras de diretorio", "* Listas configuraveis", 
-                     "* Rate limiting inteligente", "* Templates personalizaveis", "* CLI + GUI"]:
+        for feat in ["✦ Envio por regras de diretório", "✦ Listas configuráveis", 
+                     "✦ Rate limiting inteligente", "✦ Templates personalizáveis", "✦ CLI + GUI"]:
             ctk.CTkLabel(features_frame, text=feat, font=ctk.CTkFont(size=12),
                 text_color=COLORS["text"]).pack(anchor="w", padx=20, pady=3)
         
@@ -806,11 +803,6 @@ class MainApp(ctk.CTk):
         self._check_connection()
     
     def _create_widgets(self):
-        # IMPORTANTE: No Linux, criar muitos widgets de uma vez causa crash
-        # Usamos lazy loading - só cria cada painel quando necessário
-        
-        self._loading_panel = False  # Lock para evitar cliques durante carregamento
-        
         main = ctk.CTkFrame(self, fg_color="transparent")
         main.pack(fill="both", expand=True)
         
@@ -818,24 +810,14 @@ class MainApp(ctk.CTk):
         sidebar.pack(side="left", fill="y")
         sidebar.pack_propagate(False)
         
-        # Logo - usa texto estilizado em vez de emoji (melhor compatibilidade Linux)
-        logo_frame = ctk.CTkFrame(sidebar, fg_color="transparent")
-        logo_frame.pack(pady=(20, 5))
-        ctk.CTkLabel(logo_frame, text="K", 
-            font=ctk.CTkFont(size=42, weight="bold"), 
-            text_color=COLORS["accent"]).pack()
+        ctk.CTkLabel(sidebar, text="🐦‍⬛", font=ctk.CTkFont(size=36)).pack(pady=(20, 5))
         ctk.CTkLabel(sidebar, text="Krvo",
-            font=ctk.CTkFont(size=18, weight="bold"), text_color=COLORS["text"]).pack()
-        ctk.CTkLabel(sidebar, text="mensageiro",
-            font=ctk.CTkFont(size=10), text_color=COLORS["text_dim"]).pack()
+            font=ctk.CTkFont(size=18, weight="bold"), text_color=COLORS["accent"]).pack()
         
         self.nav_buttons = {}
-        nav_frame = ctk.CTkFrame(sidebar, fg_color="transparent")
-        nav_frame.pack(fill="x", pady=(20, 0))
-        
-        for text, key in [("Enviar", "send"), ("Listas", "lists"),
-                          ("Regras", "rules"), ("Config", "settings"), ("Sobre", "about")]:
-            btn = ctk.CTkButton(nav_frame, text=text, font=ctk.CTkFont(size=13),
+        for text, key in [("📤 Enviar", "send"), ("📧 Listas", "lists"),
+                          ("📁 Regras", "rules"), ("⚙️ Config", "settings"), ("ℹ️ Sobre", "about")]:
+            btn = ctk.CTkButton(sidebar, text=text, font=ctk.CTkFont(size=13),
                 fg_color="transparent", hover_color=COLORS["bg_light"],
                 anchor="w", height=40, command=lambda k=key: self._show_panel(k))
             btn.pack(fill="x", padx=10, pady=2)
@@ -844,60 +826,32 @@ class MainApp(ctk.CTk):
         content = ctk.CTkFrame(main, fg_color="transparent")
         content.pack(side="left", fill="both", expand=True)
         
-        # Criar StatusBar e LogFrame primeiro
-        self.status_bar = StatusBar(content)
         self.log_frame = LogFrame(content, height=150)
+        self.log_frame.pack(fill="x", padx=10, pady=(10, 5))
         
         self.panels_container = ctk.CTkFrame(content, fg_color="transparent")
-        
-        # Pack na ordem visual
-        self.log_frame.pack(fill="x", padx=10, pady=(10, 5))
         self.panels_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        self.status_bar = StatusBar(content)
         self.status_bar.pack(fill="x", side="bottom")
         
-        # Lazy loading: só guarda referências, cria sob demanda
-        self.panels = {}
-        self._panel_classes = {
-            "send": lambda: SendPanel(self.panels_container, self.log_frame.log),
-            "lists": lambda: EmailListsPanel(self.panels_container, self.log_frame.log),
-            "rules": lambda: RulesPanel(self.panels_container, self.log_frame.log),
-            "settings": lambda: SettingsPanel(self.panels_container, self.log_frame.log, self.status_bar),
-            "about": lambda: AboutPanel(self.panels_container),
+        self.panels = {
+            "send": SendPanel(self.panels_container, self.log_frame.log),
+            "lists": EmailListsPanel(self.panels_container, self.log_frame.log),
+            "rules": RulesPanel(self.panels_container, self.log_frame.log),
+            "settings": SettingsPanel(self.panels_container, self.log_frame.log, self.status_bar),
+            "about": AboutPanel(self.panels_container),
         }
         
-        self._current_panel = None
         self._show_panel("send")
-        self.log_frame.log("Krvo iniciado - pronto para enviar mensagens", "info")
+        self.log_frame.log("Krvo iniciado - pronto para enviar mensagens 🐦‍⬛", "info")
     
     def _show_panel(self, key: str):
-        # Evita cliques durante carregamento
-        if self._loading_panel:
-            return
-        
-        # Se já está no painel, não faz nada
-        if key == self._current_panel:
-            return
-        
-        self._loading_panel = True
-        self._current_panel = key
-        
-        # Atualiza botões imediatamente (feedback visual)
-        for k, btn in self.nav_buttons.items():
-            btn.configure(fg_color=COLORS["bg_light"] if k == key else "transparent")
-        
-        # Esconde todos os painéis existentes
         for p in self.panels.values():
             p.pack_forget()
-        
-        # Cria o painel se ainda não existe (lazy loading)
-        if key not in self.panels:
-            self.update()  # Processa eventos pendentes antes de criar
-            self.panels[key] = self._panel_classes[key]()
-        
-        # Mostra o painel
         self.panels[key].pack(fill="both", expand=True)
-        
-        self._loading_panel = False
+        for k, btn in self.nav_buttons.items():
+            btn.configure(fg_color=COLORS["bg_light"] if k == key else "transparent")
     
     def _check_connection(self):
         def check():

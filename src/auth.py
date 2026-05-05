@@ -231,6 +231,7 @@ class GraphAuthenticator:
         try:
             token = self.get_token()
             
+            # Primeiro tenta /me (precisa de User.Read)
             resp = requests.get(
                 "https://graph.microsoft.com/v1.0/me",
                 headers=self.get_headers(),
@@ -245,11 +246,33 @@ class GraphAuthenticator:
                     "user_email": user.get("mail", user.get("userPrincipalName", "")),
                     "job_title": user.get("jobTitle", ""),
                 }
-            else:
-                return {
-                    "success": False,
-                    "error": f"HTTP {resp.status_code}: {resp.text}"
-                }
+            
+            # Se /me falhar com 403, tenta endpoint de mail (só precisa de Mail.Read)
+            if resp.status_code == 403:
+                resp_mail = requests.get(
+                    "https://graph.microsoft.com/v1.0/me/mailFolders/inbox",
+                    headers=self.get_headers(),
+                    timeout=15
+                )
+                
+                if resp_mail.status_code == 200:
+                    return {
+                        "success": True,
+                        "user_name": "",
+                        "user_email": self.credentials.email,
+                        "job_title": "",
+                        "note": "Conectado (permissões de email OK)"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": f"HTTP {resp_mail.status_code}: {resp_mail.text}"
+                    }
+            
+            return {
+                "success": False,
+                "error": f"HTTP {resp.status_code}: {resp.text}"
+            }
         except Exception as e:
             return {
                 "success": False,
