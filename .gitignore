@@ -257,6 +257,7 @@ build/pyinstaller/
 
 # === SISTEMA OPERACIONAL ===
 .DS_Store
+.claude
 .DS_Store?
 ._*
 .Spotlight-V100

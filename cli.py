@@ -53,6 +53,47 @@ def print_banner():
     """)
 
 
+def cmd_mail(args):
+    """Envia email direto para um endereço, sem regras."""
+    if not args.quiet:
+        print_banner()
+
+    from src.sender import EmailSender
+    sender = EmailSender()
+
+    recipients = [args.to]
+    subject = args.subject or "Sem assunto"
+    body = args.body or ""
+    attachments = args.attach or []
+
+    if not args.quiet:
+        print(f"[INFO] Destinatário: {args.to}")
+        print(f"[INFO] Assunto: {subject}")
+        if attachments:
+            print(f"[INFO] Anexos: {', '.join(attachments)}")
+        if args.dry_run:
+            print("[INFO] Modo SIMULAÇÃO ativado")
+        print()
+
+    success, msg = sender.send_custom_email(
+        recipients=recipients,
+        subject=subject,
+        body=body,
+        attachments=[Path(a) for a in attachments] if attachments else None,
+        force=args.force,
+        dry_run=args.dry_run,
+    )
+
+    if args.json:
+        import json as _json
+        print(_json.dumps({"success": success, "message": msg}, ensure_ascii=False))
+    else:
+        icon = "✅" if success else "❌"
+        print(f"{icon} {msg}")
+
+    return 0 if success else 1
+
+
 def cmd_send(args):
     """Comando de envio de arquivos."""
     if not args.quiet:
@@ -357,6 +398,15 @@ Exemplos:
     
     subparsers = parser.add_subparsers(dest="command", help="Comandos disponíveis")
     
+    # === MAIL ===
+    mail_parser = subparsers.add_parser("mail", help="Enviar email direto para um endereço")
+    mail_parser.add_argument("to", help="Email do destinatário")
+    mail_parser.add_argument("--subject", "-s", help="Assunto do email")
+    mail_parser.add_argument("--body", "-b", help="Corpo do email")
+    mail_parser.add_argument("--attach", "-a", nargs="*", metavar="ARQUIVO", help="Arquivos a anexar")
+    mail_parser.add_argument("--dry-run", action="store_true", help="Simular envio")
+    mail_parser.add_argument("--force", action="store_true", help="Ignorar rate limiting")
+
     # === SEND ===
     send_parser = subparsers.add_parser("send", help="Enviar arquivos por email")
     send_parser.add_argument("files", nargs="*", help="Arquivos para enviar")
@@ -402,7 +452,10 @@ Exemplos:
         return 0
     
     # Roteamento
-    if args.command == "send":
+    if args.command == "mail":
+        return cmd_mail(args)
+
+    elif args.command == "send":
         return cmd_send(args)
     
     elif args.command == "status":

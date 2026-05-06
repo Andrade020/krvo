@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path . -Depth 2)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(python krvo.py mail --help)",
+      "Bash(pip install *)"
+    ]
+  }
+}
