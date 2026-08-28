@@ -8,6 +8,47 @@
 ![Python](https://img.shields.io/badge/python-3.9+-green)
 ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20Mac-lightgrey)
 
+## 📥 Download
+
+### ➡️ [Baixe a última versão em **Releases**](https://github.com/Andrade020/krvo/releases)
+
+Baixe `Krvo.zip`, extraia para uma pasta de sua escolha e pronto — não precisa instalar Python nem nenhuma dependência.
+
+## ▶️ Como Usar
+
+### Interface Gráfica
+
+Dê duplo clique em `Krvo.exe` (dentro da pasta extraída). A interface gráfica abre diretamente.
+
+### Linha de Comando
+
+Abra um terminal dentro da pasta extraída e chame `Krvo.exe` com um comando:
+
+```bash
+# Enviar um arquivo
+Krvo.exe send documento.pdf
+
+# Enviar todos os arquivos de uma pasta
+Krvo.exe send --folder ./relatorios
+
+# Modo simulação (não envia de verdade)
+Krvo.exe send --dry-run documento.pdf
+
+# Enviar email direto para um endereço, sem regras
+Krvo.exe mail joao@empresa.com --subject "Relatório diário" --body "Segue o relatório de hoje."
+
+# Ver status do sistema
+Krvo.exe status
+
+# Testar autenticação
+Krvo.exe auth test
+
+# Saída em JSON (para integração com outros programas)
+Krvo.exe status --json
+```
+
+Veja a lista completa de comandos com `Krvo.exe --help`.
+
 ## ✨ Funcionalidades
 
 - 📤 **Envio automatizado** de arquivos por email
@@ -18,66 +59,6 @@
 - 🖥️ **Interface gráfica** moderna e intuitiva
 - 💻 **CLI completo** para automação e integração
 - 🔐 **Autenticação segura** via Microsoft Graph (ROPC)
-
-## 📥 Instalação
-
-### Opção 1: Executável (Windows)
-
-1. Baixe o arquivo `Krvo.zip` da página de releases
-2. Extraia para uma pasta de sua escolha
-3. Execute `Krvo.exe`
-
-### Opção 2: Via Python
-
-```bash
-# Clone ou baixe o projeto
-git clone https://github.com/Andrade020/krvo.git
-cd krvo
-
-# Instale as dependências
-pip install -r requirements.txt
-
-# Execute
-python krvo.py
-```
-
-## 🚀 Uso Rápido
-
-### Interface Gráfica
-
-```bash
-python krvo.py
-# ou
-python krvo.py gui
-```
-
-### Linha de Comando
-
-```bash
-# Enviar um arquivo
-python krvo.py send documento.pdf
-
-# Enviar múltiplos arquivos
-python krvo.py send relatorio1.pdf relatorio2.xlsx
-
-# Enviar todos arquivos de uma pasta
-python krvo.py send --folder ./relatorios
-
-# Modo simulação (não envia de verdade)
-python krvo.py send --dry-run arquivo.pdf
-
-# Ignorar rate limiting
-python krvo.py send --force arquivo.pdf
-
-# Ver status do sistema
-python krvo.py status
-
-# Testar autenticação
-python krvo.py auth test
-
-# Saída em JSON (para integração)
-python krvo.py status --json
-```
 
 ## ⚙️ Configuração Inicial
 
@@ -122,7 +103,7 @@ Depois, no Krvo:
 
 ## 🔌 Integração com Outros Sistemas
 
-O Krvo pode ser chamado por outros programas:
+O Krvo pode ser chamado por outros programas (funciona da mesma forma com `Krvo.exe` ou `python krvo.py`):
 
 ### Python
 
@@ -132,7 +113,7 @@ import json
 
 # Enviar arquivo
 result = subprocess.run(
-    ["python", "krvo.py", "send", "--json", "arquivo.pdf"],
+    ["Krvo.exe", "send", "--json", "arquivo.pdf"],
     capture_output=True,
     text=True
 )
@@ -144,12 +125,12 @@ print(f"Sucesso: {data['success']}")
 
 ```batch
 REM Windows
-python krvo.py send --json arquivo.pdf > resultado.json
+Krvo.exe send --json arquivo.pdf > resultado.json
 ```
 
 ```powershell
 # PowerShell
-$result = python krvo.py send --json arquivo.pdf | ConvertFrom-Json
+$result = Krvo.exe send --json arquivo.pdf | ConvertFrom-Json
 if ($result.success) { Write-Host "Enviado!" }
 ```
 
@@ -174,6 +155,24 @@ krvo/
 │   └── stress_controller.py  # Rate limiting
 └── README.md
 ```
+
+## 🧑‍💻 Executar a partir do Código-Fonte (Desenvolvimento)
+
+Só é necessário se você quer modificar o Krvo. Para apenas usar o app, use o [Download](#-download) acima.
+
+```bash
+# Clone o projeto
+git clone https://github.com/Andrade020/krvo.git
+cd krvo
+
+# Instale as dependências
+pip install -r requirements.txt
+
+# Execute
+python krvo.py
+```
+
+Todos os comandos da seção [Como Usar](#️-como-usar) funcionam da mesma forma, trocando `Krvo.exe` por `python krvo.py` (ex.: `python krvo.py send documento.pdf`).
 
 ## 🔨 Build (Gerar .exe)
 
