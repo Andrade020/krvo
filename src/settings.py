@@ -212,10 +212,7 @@ Segue em anexo o relatório: {filename}
 
 Data: {date}
 
-Este é um e-mail automático.
-
-—
-Enviado via Krvo 🐦‍⬛""",
+Este é um e-mail automático.""",
                 stress_category="relatorios",
                 priority=50,
             ),
@@ -229,10 +226,7 @@ Enviado via Krvo 🐦‍⬛""",
 Arquivo: {filename}
 Data: {datetime}
 
-Verifique os detalhes no anexo.
-
-—
-Enviado via Krvo 🐦‍⬛""",
+Verifique os detalhes no anexo.""",
                 stress_category="alertas",
                 priority=100,
             ),
