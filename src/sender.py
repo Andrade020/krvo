@@ -290,22 +290,27 @@ class EmailSender:
         subject: str,
         body: str,
         attachments: Optional[List[str | Path]] = None,
+        bcc: Optional[List[str]] = None,
         stress_category: str = "default",
         force: bool = False,
         dry_run: bool = False
     ) -> Tuple[bool, str]:
         """
         Envia email customizado (sem regra).
-        
+
         Args:
-            recipients: Lista de emails
+            recipients: Lista de emails (To)
             subject: Assunto
             body: Corpo do email
             attachments: Lista de arquivos anexos (opcional)
+            bcc: Lista de emails em cópia oculta (Bcc) — não aparecem uns para
+                os outros nem para quem está no To. Uso típico: To = a própria
+                caixa (envio "para si mesmo"), Bcc = a lista de destinatários
+                reais, evitando expor a lista inteira a todo mundo.
             stress_category: Categoria para rate limiting
             force: Ignora rate limiting
             dry_run: Apenas simula
-        
+
         Returns:
             (sucesso, mensagem)
         """
@@ -323,7 +328,11 @@ class EmailSender:
             {"emailAddress": {"address": email}}
             for email in recipients
         ]
-        
+        bcc_recipients = [
+            {"emailAddress": {"address": email}}
+            for email in (bcc or [])
+        ]
+
         # Prepara anexos
         attachment_list = []
         if attachments:
@@ -364,12 +373,15 @@ class EmailSender:
                 "toRecipients": to_recipients,
             }
         }
-        
+        if bcc_recipients:
+            payload["message"]["bccRecipients"] = bcc_recipients
+
         if attachment_list:
             payload["message"]["attachments"] = attachment_list
-        
+
         if dry_run:
-            return True, f"Simulação: enviaria para {len(recipients)} destinatário(s)"
+            total = len(recipients) + len(bcc_recipients)
+            return True, f"Simulação: enviaria para {total} destinatário(s)"
         
         # Envia
         try:
@@ -384,10 +396,10 @@ class EmailSender:
             self.stress.record_send(
                 category=stress_category,
                 filename=attachments[0].name if attachments else "email_custom",
-                recipients_count=len(recipients),
+                recipients_count=len(recipients) + len(bcc_recipients),
                 success=True
             )
-            
+
             return True, "Email enviado com sucesso"
             
         except requests.exceptions.HTTPError as e:
